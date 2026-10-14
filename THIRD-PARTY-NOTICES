@@ -9,10 +9,14 @@ Artwork
 -------
 
 The mod icon at src/main/resources/assets/markscription/icon.png incorporates
-a Minecraft book texture and a supplied Markdown logo. Those third-party
-elements, including their portions of the composite icon, are excluded from
-Markscription's MIT license and remain subject to their respective owners'
-terms.
+a Minecraft book texture and a public-domain Markdown logo.
+
+The Markdown logo is in the public domain and is not subject to
+Markscription's MIT license.
+
+The Minecraft texture, including its portion of the composite icon, is
+excluded from Markscription's MIT license and remains subject to the
+applicable rights holder's terms.
 
 Minecraft artwork belongs to Mojang/Microsoft. Markscription is not an
 official Minecraft product and is not approved by or associated with
