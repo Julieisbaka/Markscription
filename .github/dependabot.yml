@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      commonmark:
+        patterns:
+          - "org.commonmark:*"
+      junit:
+        patterns:
+          - "org.junit:*"
+          - "org.junit.jupiter:*"
+          - "org.junit.platform:*"
