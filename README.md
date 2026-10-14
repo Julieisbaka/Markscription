@@ -1,54 +1,65 @@
+<p align="center">
+  <img src="src/main/resources/assets/markscription/icon.png" alt="Markscription: the Markdown symbol on a Minecraft book" width="128">
+</p>
+
 # Markscription
 
-Write Markdown in a book and quill, then sign it to read formatted text.
+**Give your Minecraft books a little more character.**
+
+Markscription brings Markdown to written books. Create journals with bold headings,
+organize guides with lists, add links, or share snippets of colorful code.
+Write in a book and quill as usual, then sign it to see your formatting.
+
+## Features
+
+- **Expressive text:** bold, italic, and strikethrough.
+- **Organized pages:** headings, numbered lists, bullet lists, and quotations.
+- **Code-friendly books:** inline code and code blocks, with syntax highlighting for
+  Java, JavaScript, Python, and JSON.
+- **Clickable web links:** link readers to websites using HTTP or HTTPS.
+- **Read wherever you like:** works with books in your hand and on lecterns.
+- **Your preferred style:** turn individual formatting features on or off for local reading.
+- **Flexible multiplayer support:** use it on your client, your server, or both.
 
 ## Installation
 
-Requires Minecraft **26.3**, Fabric Loader **0.19.5 or newer**, and Java **25**.
+For **Minecraft Java Edition 26.3** with **Fabric Loader 0.19.5 or newer** and **Java 25**.
 
-- **Client only:** renders Markdown in existing plain-text written books, including
-  books on lecterns, without changing their stored contents. Works on vanilla servers.
-- **Server only:** formats books when players sign them. Formatting is stored as vanilla
-  text components, so unmodded clients can read it. Existing books are not rewritten.
-- **Both:** supports both behaviors without interpreting already formatted pages twice.
-- **Single player:** installing on the client also enables formatting when signing.
+1. Install Fabric for Minecraft 26.3.
+2. Put the Markscription mod JAR in your Minecraft instance's `mods` folder.
+3. Launch the game and grab a book and quill!
 
-Book-and-quill editing stays vanilla: you see Markdown source until you sign.
-The server preserves vanilla text filtering and separately formats raw and filtered pages.
-Previously formatted rich-text pages (including command-created books) are left untouched.
+Markscription itself does **not** require Fabric API.
 
-## Supported Markdown
+Want an in-game settings screen? Also install compatible versions of
+[Mod Menu](https://modrinth.com/mod/modmenu) and
+[Cloth Config](https://modrinth.com/mod/cloth-config), along with their required
+dependencies.
 
-```markdown
-# A heading
-**Bold**, *italic*, ***both***, and ~~strikethrough~~.
-Inline `code` and [links](https://minecraft.net).
+## Writing your first book
 
-- First item
-- Second item
-  - Nested item
+Enter Markdown in a book and quill. You'll see the original text while editing;
+the formatting appears when you read the signed book.
 
-1. Numbered item
-2. Another item
+| Write this | Get this |
+| --- | --- |
+| `**bold**` | **bold** |
+| `*italic*` | *italic* |
+| `~~strikethrough~~` | ~~strikethrough~~ |
+| `# A heading` | A bold heading |
+| `- An item` | A bullet-list item |
+| `1. An item` | A numbered-list item |
+| `> A quotation` | A quotation |
+| `` `code` `` | Monospaced code |
+| `[Minecraft](https://minecraft.net)` | A clickable link |
 
-> A quotation
+Start headings, list items, and quotations on a new line. Leave a blank line between
+paragraphs. Headings use bold text rather than a larger font.
 
----
-```
+### Colorful code blocks
 
-Fenced and indented code blocks, reference links, escapes, and hard line breaks
-are also supported. Single newlines remain newlines, useful for book layouts.
-Headings are bold rather than larger; code uses Minecraft's uniform font.
-Images show their alt text only. HTML is displayed as text, never executed.
-Only absolute HTTP/HTTPS links become clickable, using Minecraft's normal link handling.
-Tables, embedded images, and task checkboxes are not implemented.
-
-### Syntax highlighting
-
-Labeled fenced code blocks support **Java** (`java`), **JavaScript** (`javascript`, `js`),
-**Python** (`python`, `py`), and **JSON** (`json`). Labels are case-insensitive.
-Keywords, strings, comments, and numbers use dark colors suitable for book pages.
-Inline code, indented code, and unknown/unlabeled fences keep plain code formatting.
+Surround a code snippet with three backticks and put its language after the opening
+backticks:
 
 ````markdown
 ```java
@@ -56,74 +67,47 @@ int count = 42; // A comment
 ```
 ````
 
-This is a small, single-pass lexical highlighter, not a full language parser:
-JavaScript template strings are colored as strings without interpolation highlighting,
-and regex literals and Python string prefixes/interpolation are not specially parsed.
-Source text is never changed by highlighting. If colors make a page too large to store,
-the renderer retries with plain code styling before falling back to the original page.
-Server-side highlighting is saved as vanilla components and is visible to vanilla readers.
+Supported labels: `java`, `javascript` or `js`, `python` or `py`, and `json`.
+Other languages still appear as plain code blocks.
 
-## Client settings
+## Single player and multiplayer
 
-The client creates `config/markscription-client.json` in your Minecraft instance:
+| Where you install it | What you get |
+| --- | --- |
+| **Single player** | Formatting when you sign books, plus local formatting for older plain-text Markdown books. |
+| **Client only** | Read plain-text Markdown books with formatting, even on vanilla servers. Other players need the mod to see that formatting too. |
+| **Server only** | Newly signed books keep their formatting for everyone, including vanilla players. Existing books aren't changed. |
+| **Both** | The best coverage: locally formatted older books and newly signed books that everyone can read with formatting. |
 
-```json
-{
-  "markdown": true,
-  "bold": true,
-  "italic": true,
-  "strikethrough": true,
-  "headings": true,
-  "code": true,
-  "links": true,
-  "syntaxHighlighting": true
-}
-```
+On a modded server, formatting in newly signed books stays with the book, even if
+the mod is removed later.
 
-Set a value to `false` to disable it. Missing settings default to `true`.
-`markdown: false` shows the original page source. Individual toggles disable styling,
-not Markdown parsing: for example, disabling bold shows the label without `**` markers;
-disabling links shows labels without clickable actions. Heading styling is independent
-of bold emphasis. Disabling code styling also disables highlighting.
+## Make it yours
 
-For a standard settings screen, optionally install **Mod Menu 21.0.0+** and
-**Cloth Config 26.3.159+** for Fabric 26.3, plus their required dependencies.
-Open Mods > Markscription > Configure. The screen uses Cloth Config's controls;
-neither library is bundled or required by Markscription. If either is missing,
-edit the JSON file instead. File edits are loaded on client startup; screen changes
-apply to books opened afterward (close and reopen an open book).
-Malformed files are logged with an error, left untouched, and defaults are used.
+With Mod Menu and Cloth Config installed, open **Mods > Markscription > Configure**.
+Choose whether to show bold, italic, strikethrough, heading styles, code styles,
+clickable links, and syntax highlighting. You can also switch off local Markdown
+rendering entirely to read the original text.
 
-These are **local rendering settings only**. They do not affect dedicated servers,
-formatting when signing (including in single player), or existing rich-text/server-baked
-pages. Server-formatted books have no original Markdown source to selectively re-render.
+Without the settings-screen mods, edit `config/markscription-client.json` in your
+Minecraft instance and restart the game. Set an option to `false` to disable it.
+When changing settings in-game, close and reopen your book to see the changes.
 
-### Book limits
+These preferences only affect local reading of plain-text Markdown books. They don't
+change formatting when signing or remove formatting already saved by a server.
 
-Each original page is formatted independently. There is no automatic repagination:
-Minecraft's normal page size, wrapping, and clipping still apply. Keep pages short,
-especially when using bold text or lists. Formatting at signing is permanent, just like
-signing a vanilla book; keep a source copy if needed. Escaped Markdown and code are not
-reinterpreted on modded clients because baked pages carry an explicit vanilla default style.
+The settings screen supports English, Spanish, French, German, Brazilian Portuguese,
+Japanese, Simplified Chinese, Korean, and Russian, following your Minecraft language.
 
-Pages exceeding Minecraft's component serialization limit or the renderer's nesting
-limit are kept unchanged, with a warning in the game/server log.
+## Good to know
 
-## Development
-
-```powershell
-.\gradlew.bat build
-.\gradlew.bat runClient
-.\gradlew.bat runServer
-```
-
-The build runs JUnit tests and produces the installable JAR and a sources JAR in `build/libs`.
-`runClient` includes Mod Menu, Cloth Config, Fabric API, and Placeholder API for testing
-the settings screen. These are client-only development dependencies: they are not bundled
-in the release JAR or added to `runServer`. The Gradle wrapper scripts need no changes.
-
-The local test-server launcher, `test-servers/Start-TestServer.ps1`, has a `ModVersion`
-constant immediately after its parameter block. Update that single value when changing
-the mod version; both the source JAR path and destination filename use it.
-When switching versions, remove the previous Markscription JAR from the test server's
-`mods` folder before starting, so Fabric does not find two copies of the mod.
+- **Keep pages short.** Minecraft's usual book space still applies; long content
+  doesn't automatically flow onto another page.
+- **Signing is permanent.** Keep an unsigned copy if you'd like to save your Markdown source.
+- **Unicode text is welcome.** Character appearance depends on Minecraft's fonts and
+  your resource packs.
+- **Existing styled books stay as they are.** Markscription leaves their formatting alone.
+- **No embedded images, tables, or interactive checkboxes.** Image descriptions appear
+  as text, and HTML appears literally.
+- **Keep examples literal.** Use inline code or escape Markdown characters with `\`
+  when you want the symbols themselves to appear.
