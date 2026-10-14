@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Julieisbaka/Markscription/main/src/main/resources/assets/markscription/icon.png" alt="Markscription: the Markdown symbol on a Minecraft book" width="128">
+  <img src="src/main/resources/assets/markscription/icon.png" alt="Markscription: the Markdown symbol on a Minecraft book" width="128">
 </p>
 
 # Markscription
