@@ -9,8 +9,12 @@
   ],
   "environment": "*",
   "entrypoints": {
-    "client": ["org.JulieISBaka.markscription.client.ClientSettings"],
-    "modmenu": ["org.JulieISBaka.markscription.client.ModMenuIntegration"]
+    "client": [
+      "org.JulieISBaka.markscription.client.ClientSettings"
+    ],
+    "modmenu": [
+      "org.JulieISBaka.markscription.client.ModMenuIntegration"
+    ]
   },
   "mixins": [
     "markscription.mixins.json",

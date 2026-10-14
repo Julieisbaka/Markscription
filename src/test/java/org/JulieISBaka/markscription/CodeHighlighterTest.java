@@ -67,7 +67,8 @@ class CodeHighlighterTest {
             assertContains(highlight(code, label), code, Token.KEYWORD);
         }
         for (String label : List.of("", "text", "rust", "typescript", "java-ish")) {
-            assertFalse(CodeHighlighter.highlight("return", label, (text, token) -> fail("Unknown language emitted text")));
+            assertFalse(
+                    CodeHighlighter.highlight("return", label, (text, token) -> fail("Unknown language emitted text")));
         }
     }
 
@@ -86,7 +87,8 @@ class CodeHighlighterTest {
         String source = "int value = 42; // comment\n".repeat(1000);
         assertTimeout(Duration.ofSeconds(10), () -> {
             for (int i = 0; i < 100; i++) {
-                assertTrue(CodeHighlighter.highlight(source, "java", (text, token) -> {}));
+                assertTrue(CodeHighlighter.highlight(source, "java", (text, token) -> {
+                }));
             }
         });
         assertEquals(1, highlight("ordinary identifiers and punctuation + = ; ".repeat(500), "java").size());
