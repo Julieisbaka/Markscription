@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Lokale Buchdarstellung",
+  "markscription.config.markdown": "Markdown darstellen",
+  "markscription.config.markdown.tooltip": "Formatiert geschriebene Bücher mit Klartext lokal. Ausschalten, um den Quelltext anzuzeigen. Ändert weder serverseitig formatierte Bücher noch die Formatierung beim Signieren.",
+  "markscription.config.bold": "Fettschrift",
+  "markscription.config.bold.tooltip": "Stellt entsprechend markierten Text fett dar. Wenn deaktiviert, wird der Text ohne Markdown-Markierungen angezeigt.",
+  "markscription.config.italic": "Kursivschrift",
+  "markscription.config.italic.tooltip": "Stellt entsprechend markierten Text kursiv dar. Wenn deaktiviert, wird der Text ohne Markdown-Markierungen angezeigt.",
+  "markscription.config.strikethrough": "Durchgestrichener Text",
+  "markscription.config.strikethrough.tooltip": "Stellt Text durchgestrichen dar. Wenn deaktiviert, wird der Text ohne Markdown-Markierungen angezeigt.",
+  "markscription.config.headings": "Überschriftenstil",
+  "markscription.config.headings.tooltip": "Zeigt Überschriften fett an. Unabhängig von der Fettschrift-Einstellung für normalen Text.",
+  "markscription.config.code": "Codeformatierung",
+  "markscription.config.code.tooltip": "Verwendet die einheitliche Schriftart für Inline-Code und Codeblöcke. Ausschalten deaktiviert auch die Syntaxhervorhebung.",
+  "markscription.config.links": "Anklickbare Markdown-Links",
+  "markscription.config.links.tooltip": "Färbt, unterstreicht und aktiviert HTTP/HTTPS-Links. Wenn deaktiviert, werden nur ihre Beschriftungen angezeigt. Vorhandene Klickaktionen in formatiertem Text bleiben unverändert.",
+  "markscription.config.syntaxHighlighting": "Syntaxhervorhebung",
+  "markscription.config.syntaxHighlighting.tooltip": "Hebt Schlüsselwörter, Zeichenfolgen, Kommentare und Zahlen in eingezäunten Codeblöcken für java, javascript/js, python/py und json hervor."
+}

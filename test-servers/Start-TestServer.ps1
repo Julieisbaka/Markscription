@@ -4,6 +4,8 @@ param(
     [string]$Server
 )
 
+Set-Variable -Name ModVersion -Value '0.2.0' -Option Constant
+
 $ErrorActionPreference = 'Stop'
 $serverDirectory = Join-Path $PSScriptRoot $Server
 $java = if ($env:JAVA_HOME) {
@@ -13,11 +15,12 @@ $java = if ($env:JAVA_HOME) {
 }
 
 if ($Server -eq 'modded') {
-    $mod = Join-Path $PSScriptRoot '..\build\libs\Markscription-1.0.0.jar'
+    $modFileName = "Markscription-$ModVersion.jar"
+    $mod = Join-Path $PSScriptRoot "..\build\libs\$modFileName"
     if (!(Test-Path -LiteralPath $mod)) {
         throw 'Build Markscription first with .\gradlew.bat build.'
     }
-    Copy-Item -LiteralPath $mod -Destination (Join-Path $serverDirectory 'mods\Markscription-1.0.0.jar')
+    Copy-Item -LiteralPath $mod -Destination (Join-Path $serverDirectory "mods\$modFileName")
     $jar = 'fabric-server-launch.jar'
 } else {
     $jar = 'server.jar'

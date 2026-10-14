@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Formatação local de livros",
+  "markscription.config.markdown": "Exibir Markdown",
+  "markscription.config.markdown.tooltip": "Formata localmente livros escritos com texto simples. Desative para mostrar o texto original. Não altera livros formatados pelo servidor nem a formatação ao assinar.",
+  "markscription.config.bold": "Texto em negrito",
+  "markscription.config.bold.tooltip": "Aplica negrito ao texto marcado. Quando desativado, mostra o texto sem os marcadores Markdown.",
+  "markscription.config.italic": "Texto em itálico",
+  "markscription.config.italic.tooltip": "Aplica itálico ao texto marcado. Quando desativado, mostra o texto sem os marcadores Markdown.",
+  "markscription.config.strikethrough": "Texto riscado",
+  "markscription.config.strikethrough.tooltip": "Aplica o estilo riscado. Quando desativado, mostra o texto sem os marcadores Markdown.",
+  "markscription.config.headings": "Estilo dos títulos",
+  "markscription.config.headings.tooltip": "Mostra títulos em negrito. Independente da opção de negrito para o texto.",
+  "markscription.config.code": "Estilo do código",
+  "markscription.config.code.tooltip": "Usa a fonte uniforme para código em linha e blocos de código. Desativar esta opção também desativa o realce de sintaxe.",
+  "markscription.config.links": "Links Markdown clicáveis",
+  "markscription.config.links.tooltip": "Colore, sublinha e ativa links HTTP/HTTPS. Quando desativado, mostra apenas seus rótulos. As ações de clique de textos já formatados não são alteradas.",
+  "markscription.config.syntaxHighlighting": "Realce de sintaxe",
+  "markscription.config.syntaxHighlighting.tooltip": "Destaca palavras-chave, strings, comentários e números em blocos de código delimitados de java, javascript/js, python/py e json."
+}

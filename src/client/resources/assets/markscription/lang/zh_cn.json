@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "本地书籍渲染",
+  "markscription.config.markdown": "渲染 Markdown",
+  "markscription.config.markdown.tooltip": "在本地为纯文本的成书应用格式。关闭后显示原始文本。不影响服务器已格式化的书籍或签名时的格式化。",
+  "markscription.config.bold": "粗体文字",
+  "markscription.config.bold.tooltip": "为相应标记的文本应用粗体。关闭后显示去除 Markdown 标记的文本。",
+  "markscription.config.italic": "斜体文字",
+  "markscription.config.italic.tooltip": "为相应标记的文本应用斜体。关闭后显示去除 Markdown 标记的文本。",
+  "markscription.config.strikethrough": "删除线",
+  "markscription.config.strikethrough.tooltip": "应用删除线样式。关闭后显示去除 Markdown 标记的文本。",
+  "markscription.config.headings": "标题样式",
+  "markscription.config.headings.tooltip": "以粗体显示标题。此选项独立于正文的粗体设置。",
+  "markscription.config.code": "代码样式",
+  "markscription.config.code.tooltip": "为行内代码和代码块使用等宽字体。关闭此选项也会禁用语法高亮。",
+  "markscription.config.links": "可点击的 Markdown 链接",
+  "markscription.config.links.tooltip": "为 HTTP/HTTPS 链接着色、添加下划线并启用点击。关闭后仅显示链接文本。不改变现有富文本的点击操作。",
+  "markscription.config.syntaxHighlighting": "语法高亮",
+  "markscription.config.syntaxHighlighting.tooltip": "高亮标记为 java、javascript/js、python/py 和 json 的围栏代码块中的关键字、字符串、注释和数字。"
+}

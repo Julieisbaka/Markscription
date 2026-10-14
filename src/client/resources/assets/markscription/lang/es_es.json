@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Formato local de libros",
+  "markscription.config.markdown": "Mostrar formato Markdown",
+  "markscription.config.markdown.tooltip": "Da formato localmente a los libros escritos con texto sin formato. Desactívalo para ver el texto original. No cambia los libros formateados por el servidor ni el formato aplicado al firmar.",
+  "markscription.config.bold": "Texto en negrita",
+  "markscription.config.bold.tooltip": "Aplica negrita al texto marcado. Si se desactiva, muestra el texto sin los marcadores Markdown.",
+  "markscription.config.italic": "Texto en cursiva",
+  "markscription.config.italic.tooltip": "Aplica cursiva al texto marcado. Si se desactiva, muestra el texto sin los marcadores Markdown.",
+  "markscription.config.strikethrough": "Texto tachado",
+  "markscription.config.strikethrough.tooltip": "Aplica el estilo tachado. Si se desactiva, muestra el texto sin los marcadores Markdown.",
+  "markscription.config.headings": "Formato de títulos",
+  "markscription.config.headings.tooltip": "Muestra los títulos en negrita. Es independiente de la opción de negrita del texto.",
+  "markscription.config.code": "Formato de código",
+  "markscription.config.code.tooltip": "Usa la fuente uniforme para el código en línea y los bloques de código. Desactivar esta opción también desactiva el resaltado de sintaxis.",
+  "markscription.config.links": "Enlaces Markdown interactivos",
+  "markscription.config.links.tooltip": "Colorea, subraya y activa los enlaces HTTP/HTTPS. Si se desactiva, muestra solo sus etiquetas. No cambia las acciones de clic del texto enriquecido existente.",
+  "markscription.config.syntaxHighlighting": "Resaltado de sintaxis",
+  "markscription.config.syntaxHighlighting.tooltip": "Resalta palabras clave, cadenas, comentarios y números en bloques delimitados de java, javascript/js, python/py y json."
+}

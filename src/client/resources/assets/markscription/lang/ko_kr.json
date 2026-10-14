@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "로컬 책 표시",
+  "markscription.config.markdown": "Markdown 표시",
+  "markscription.config.markdown.tooltip": "일반 텍스트로 된 쓰인 책의 서식을 로컬에서 적용합니다. 끄면 원본 텍스트를 표시합니다. 서버에서 서식이 적용된 책이나 서명할 때의 서식 적용에는 영향을 주지 않습니다.",
+  "markscription.config.bold": "굵은 글씨",
+  "markscription.config.bold.tooltip": "해당 표시가 있는 텍스트를 굵게 표시합니다. 끄면 Markdown 기호를 제외한 텍스트를 표시합니다.",
+  "markscription.config.italic": "기울임꼴",
+  "markscription.config.italic.tooltip": "해당 표시가 있는 텍스트를 기울임꼴로 표시합니다. 끄면 Markdown 기호를 제외한 텍스트를 표시합니다.",
+  "markscription.config.strikethrough": "취소선",
+  "markscription.config.strikethrough.tooltip": "취소선 스타일을 적용합니다. 끄면 Markdown 기호를 제외한 텍스트를 표시합니다.",
+  "markscription.config.headings": "제목 스타일",
+  "markscription.config.headings.tooltip": "제목을 굵게 표시합니다. 본문의 굵은 글씨 설정과 별개입니다.",
+  "markscription.config.code": "코드 스타일",
+  "markscription.config.code.tooltip": "인라인 코드와 코드 블록에 고정폭 글꼴을 사용합니다. 이 옵션을 끄면 구문 강조도 비활성화됩니다.",
+  "markscription.config.links": "클릭 가능한 Markdown 링크",
+  "markscription.config.links.tooltip": "HTTP/HTTPS 링크에 색상과 밑줄을 적용하고 클릭을 활성화합니다. 끄면 링크 텍스트만 표시합니다. 기존 서식 있는 텍스트의 클릭 동작은 변경하지 않습니다.",
+  "markscription.config.syntaxHighlighting": "구문 강조",
+  "markscription.config.syntaxHighlighting.tooltip": "java, javascript/js, python/py, json으로 지정된 울타리 코드 블록의 키워드, 문자열, 주석, 숫자를 강조합니다."
+}

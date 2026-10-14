@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "本のローカル表示",
+  "markscription.config.markdown": "Markdownを表示",
+  "markscription.config.markdown.tooltip": "プレーンテキストの記入済みの本をローカルで整形します。オフにすると元のテキストを表示します。サーバーで整形済みの本や署名時の整形には影響しません。",
+  "markscription.config.bold": "太字",
+  "markscription.config.bold.tooltip": "強調されたテキストを太字にします。オフの場合、Markdownの記号を除いたテキストを表示します。",
+  "markscription.config.italic": "斜体",
+  "markscription.config.italic.tooltip": "強調されたテキストを斜体にします。オフの場合、Markdownの記号を除いたテキストを表示します。",
+  "markscription.config.strikethrough": "取り消し線",
+  "markscription.config.strikethrough.tooltip": "取り消し線を適用します。オフの場合、Markdownの記号を除いたテキストを表示します。",
+  "markscription.config.headings": "見出しの装飾",
+  "markscription.config.headings.tooltip": "見出しを太字で表示します。本文の太字設定とは独立しています。",
+  "markscription.config.code": "コードの装飾",
+  "markscription.config.code.tooltip": "インラインコードとコードブロックに等幅フォントを使用します。オフにすると構文の強調表示も無効になります。",
+  "markscription.config.links": "クリック可能なMarkdownリンク",
+  "markscription.config.links.tooltip": "HTTP/HTTPSリンクに色と下線を付け、クリック可能にします。オフの場合はラベルのみ表示します。既存の装飾付きテキストのクリック動作は変更しません。",
+  "markscription.config.syntaxHighlighting": "構文の強調表示",
+  "markscription.config.syntaxHighlighting.tooltip": "java、javascript/js、python/py、jsonと指定されたフェンス付きコードブロック内のキーワード、文字列、コメント、数値を強調表示します。"
+}

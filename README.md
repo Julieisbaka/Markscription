@@ -118,3 +118,12 @@ limit are kept unchanged, with a warning in the game/server log.
 ```
 
 The build runs JUnit tests and produces the installable JAR and a sources JAR in `build/libs`.
+`runClient` includes Mod Menu, Cloth Config, Fabric API, and Placeholder API for testing
+the settings screen. These are client-only development dependencies: they are not bundled
+in the release JAR or added to `runServer`. The Gradle wrapper scripts need no changes.
+
+The local test-server launcher, `test-servers/Start-TestServer.ps1`, has a `ModVersion`
+constant immediately after its parameter block. Update that single value when changing
+the mod version; both the source JAR path and destination filename use it.
+When switching versions, remove the previous Markscription JAR from the test server's
+`mods` folder before starting, so Fabric does not find two copies of the mod.

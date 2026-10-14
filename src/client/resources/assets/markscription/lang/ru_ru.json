@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Локальное отображение книг",
+  "markscription.config.markdown": "Отображать Markdown",
+  "markscription.config.markdown.tooltip": "Локально форматирует подписанные книги с обычным текстом. Отключите для показа исходного текста. Не влияет на книги, отформатированные сервером, и на форматирование при подписании.",
+  "markscription.config.bold": "Жирный текст",
+  "markscription.config.bold.tooltip": "Применяет жирное начертание к отмеченному тексту. Если отключено, показывает текст без маркеров Markdown.",
+  "markscription.config.italic": "Курсив",
+  "markscription.config.italic.tooltip": "Применяет курсив к отмеченному тексту. Если отключено, показывает текст без маркеров Markdown.",
+  "markscription.config.strikethrough": "Зачёркнутый текст",
+  "markscription.config.strikethrough.tooltip": "Применяет зачёркивание. Если отключено, показывает текст без маркеров Markdown.",
+  "markscription.config.headings": "Стиль заголовков",
+  "markscription.config.headings.tooltip": "Показывает заголовки жирным. Не зависит от настройки жирного начертания для обычного текста.",
+  "markscription.config.code": "Стиль кода",
+  "markscription.config.code.tooltip": "Использует моноширинный шрифт для встроенного кода и блоков кода. Отключение также выключает подсветку синтаксиса.",
+  "markscription.config.links": "Кликабельные ссылки Markdown",
+  "markscription.config.links.tooltip": "Окрашивает, подчёркивает и активирует ссылки HTTP/HTTPS. Если отключено, показывает только текст ссылок. Существующие действия по нажатию в форматированном тексте не изменяются.",
+  "markscription.config.syntaxHighlighting": "Подсветка синтаксиса",
+  "markscription.config.syntaxHighlighting.tooltip": "Подсвечивает ключевые слова, строки, комментарии и числа в ограждённых блоках кода java, javascript/js, python/py и json."
+}

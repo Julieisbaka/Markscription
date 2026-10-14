@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Mise en forme locale des livres",
+  "markscription.config.markdown": "Afficher le Markdown",
+  "markscription.config.markdown.tooltip": "Met en forme localement les livres écrits en texte brut. Désactivez cette option pour afficher le texte source. Ne modifie ni les livres mis en forme par le serveur ni la mise en forme lors de la signature.",
+  "markscription.config.bold": "Texte en gras",
+  "markscription.config.bold.tooltip": "Applique le gras au texte marqué. Si désactivé, affiche le texte sans les marqueurs Markdown.",
+  "markscription.config.italic": "Texte en italique",
+  "markscription.config.italic.tooltip": "Applique l'italique au texte marqué. Si désactivé, affiche le texte sans les marqueurs Markdown.",
+  "markscription.config.strikethrough": "Texte barré",
+  "markscription.config.strikethrough.tooltip": "Applique le style barré. Si désactivé, affiche le texte sans les marqueurs Markdown.",
+  "markscription.config.headings": "Style des titres",
+  "markscription.config.headings.tooltip": "Affiche les titres en gras. Indépendant du réglage du gras pour le texte.",
+  "markscription.config.code": "Style du code",
+  "markscription.config.code.tooltip": "Utilise la police uniforme pour le code en ligne et les blocs de code. Désactiver cette option désactive aussi la coloration syntaxique.",
+  "markscription.config.links": "Liens Markdown cliquables",
+  "markscription.config.links.tooltip": "Colore, souligne et active les liens HTTP/HTTPS. Si désactivé, affiche uniquement leurs libellés. Les actions de clic du texte enrichi existant restent inchangées.",
+  "markscription.config.syntaxHighlighting": "Coloration syntaxique",
+  "markscription.config.syntaxHighlighting.tooltip": "Colore les mots-clés, chaînes, commentaires et nombres dans les blocs de code balisés java, javascript/js, python/py et json."
+}
