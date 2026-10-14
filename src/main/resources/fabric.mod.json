@@ -3,6 +3,7 @@
   "id": "markscription",
   "version": "${version}",
   "name": "Markscription",
+  "icon": "assets/markscription/icon.png",
   "description": "Markdown for written books, on clients and when signing on servers.",
   "authors": [
     "JulieISBaka"
