@@ -1,0 +1,7 @@
+.gradle/
+build/
+logs/
+run/
+test-servers/modded/
+test-servers/vanilla/
+.vscode/

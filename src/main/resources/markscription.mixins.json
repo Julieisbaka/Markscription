@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "org.JulieISBaka.markscription.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "ServerGamePacketListenerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

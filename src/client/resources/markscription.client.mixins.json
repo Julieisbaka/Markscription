@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "org.JulieISBaka.markscription.mixin.client",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "BookAccessMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "markscription",
+  "version": "${version}",
+  "name": "Markscription",
+  "description": "Markdown for written books, on clients and when signing on servers.",
+  "authors": [
+    "JulieISBaka"
+  ],
+  "environment": "*",
+  "mixins": [
+    "markscription.mixins.json",
+    {
+      "config": "markscription.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25"
+  }
+}
