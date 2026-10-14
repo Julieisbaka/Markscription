@@ -41,7 +41,62 @@ are also supported. Single newlines remain newlines, useful for book layouts.
 Headings are bold rather than larger; code uses Minecraft's uniform font.
 Images show their alt text only. HTML is displayed as text, never executed.
 Only absolute HTTP/HTTPS links become clickable, using Minecraft's normal link handling.
-Tables, embedded images, task checkboxes, and syntax highlighting are not yet implemented.
+Tables, embedded images, and task checkboxes are not implemented.
+
+### Syntax highlighting
+
+Labeled fenced code blocks support **Java** (`java`), **JavaScript** (`javascript`, `js`),
+**Python** (`python`, `py`), and **JSON** (`json`). Labels are case-insensitive.
+Keywords, strings, comments, and numbers use dark colors suitable for book pages.
+Inline code, indented code, and unknown/unlabeled fences keep plain code formatting.
+
+````markdown
+```java
+int count = 42; // A comment
+```
+````
+
+This is a small, single-pass lexical highlighter, not a full language parser:
+JavaScript template strings are colored as strings without interpolation highlighting,
+and regex literals and Python string prefixes/interpolation are not specially parsed.
+Source text is never changed by highlighting. If colors make a page too large to store,
+the renderer retries with plain code styling before falling back to the original page.
+Server-side highlighting is saved as vanilla components and is visible to vanilla readers.
+
+## Client settings
+
+The client creates `config/markscription-client.json` in your Minecraft instance:
+
+```json
+{
+  "markdown": true,
+  "bold": true,
+  "italic": true,
+  "strikethrough": true,
+  "headings": true,
+  "code": true,
+  "links": true,
+  "syntaxHighlighting": true
+}
+```
+
+Set a value to `false` to disable it. Missing settings default to `true`.
+`markdown: false` shows the original page source. Individual toggles disable styling,
+not Markdown parsing: for example, disabling bold shows the label without `**` markers;
+disabling links shows labels without clickable actions. Heading styling is independent
+of bold emphasis. Disabling code styling also disables highlighting.
+
+For a standard settings screen, optionally install **Mod Menu 21.0.0+** and
+**Cloth Config 26.3.159+** for Fabric 26.3, plus their required dependencies.
+Open Mods > Markscription > Configure. The screen uses Cloth Config's controls;
+neither library is bundled or required by Markscription. If either is missing,
+edit the JSON file instead. File edits are loaded on client startup; screen changes
+apply to books opened afterward (close and reopen an open book).
+Malformed files are logged with an error, left untouched, and defaults are used.
+
+These are **local rendering settings only**. They do not affect dedicated servers,
+formatting when signing (including in single player), or existing rich-text/server-baked
+pages. Server-formatted books have no original Markdown source to selectively re-render.
 
 ### Book limits
 

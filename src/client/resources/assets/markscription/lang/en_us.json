@@ -1,0 +1,20 @@
+{
+  "markscription.config.title": "Markscription",
+  "markscription.config.category": "Local book rendering",
+  "markscription.config.markdown": "Render Markdown",
+  "markscription.config.markdown.tooltip": "Format plain-text written books locally. Turn off to show the original source. Does not change server-formatted books or formatting when signing.",
+  "markscription.config.bold": "Bold text",
+  "markscription.config.bold.tooltip": "Apply bold styling to emphasis. When off, show the text without the Markdown markers.",
+  "markscription.config.italic": "Italic text",
+  "markscription.config.italic.tooltip": "Apply italic styling to emphasis. When off, show the text without the Markdown markers.",
+  "markscription.config.strikethrough": "Strikethrough",
+  "markscription.config.strikethrough.tooltip": "Apply strikethrough styling. When off, show the text without the Markdown markers.",
+  "markscription.config.headings": "Heading styling",
+  "markscription.config.headings.tooltip": "Show headings in bold. Independent of the bold emphasis setting.",
+  "markscription.config.code": "Code styling",
+  "markscription.config.code.tooltip": "Use the uniform font for inline code and code blocks. Turning this off also disables syntax highlighting.",
+  "markscription.config.links": "Clickable Markdown links",
+  "markscription.config.links.tooltip": "Color, underline, and enable HTTP/HTTPS links. When off, show only their labels. Existing rich-text click actions are not changed.",
+  "markscription.config.syntaxHighlighting": "Syntax highlighting",
+  "markscription.config.syntaxHighlighting.tooltip": "Highlight keywords, strings, comments, and numbers in java, javascript/js, python/py, and json fenced blocks."
+}

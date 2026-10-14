@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.component.WrittenBookContent;
+import org.JulieISBaka.markscription.RenderOptions.Feature;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -209,6 +210,94 @@ class MarkdownBooksTest {
         assertEquals("\ud83d\ude00", result.getString());
         assertEquals(1, result.getString().codePointCount(0, result.getString().length()));
         assertTrue(styleOf(result, "\ud83d\ude00").isBold());
+    }
+
+    @Test
+    void labeledFencesHighlightButInlineAndUnknownCodeStayPlain() {
+        Component page = render("```java\nreturn 42; // comment\n```");
+        assertEquals("return 42; // comment", page.getString());
+        assertEquals(CodeHighlighter.Token.KEYWORD.color(), styleOf(page, "return").getColor().getValue());
+        assertEquals(CodeHighlighter.Token.NUMBER.color(), styleOf(page, "42").getColor().getValue());
+        assertEquals(CodeHighlighter.Token.COMMENT.color(), styleOf(page, "// comment").getColor().getValue());
+        assertEquals(0x333333, styleOf(render("`return`"), "return").getColor().getValue());
+        for (String label : List.of("", "unknown")) {
+            Component plain = render("```" + label + "\nreturn 42;\n```");
+            assertEquals(0x333333, styleOf(plain, "return 42;").getColor().getValue());
+        }
+    }
+
+    @Test
+    void renderingSwitchesIndependentlyDisableStyles() {
+        Component source = Component.literal("**bold**");
+        assertSame(source, MarkdownBooks.renderPage(source, RenderOptions.DEFAULT.with(Feature.MARKDOWN, false)));
+        Component bold = MarkdownBooks.renderPage(source, RenderOptions.DEFAULT.with(Feature.BOLD, false));
+        assertEquals("bold", bold.getString());
+        assertFalse(styleOf(bold, "bold").isBold());
+        Component italic = MarkdownBooks.renderPage(Component.literal("*italic*"),
+                RenderOptions.DEFAULT.with(Feature.ITALIC, false));
+        assertFalse(styleOf(italic, "italic").isItalic());
+        Component strike = MarkdownBooks.renderPage(Component.literal("~~strike~~"),
+                RenderOptions.DEFAULT.with(Feature.STRIKETHROUGH, false));
+        assertFalse(styleOf(strike, "strike").isStrikethrough());
+        Component heading = MarkdownBooks.renderPage(Component.literal("# Title\n\n**bold**"),
+                RenderOptions.DEFAULT.with(Feature.HEADINGS, false));
+        assertFalse(styleOf(heading, "Title").isBold());
+        assertTrue(styleOf(heading, "bold").isBold());
+        Component link = MarkdownBooks.renderPage(Component.literal("[label](https://example.com)"),
+                RenderOptions.DEFAULT.with(Feature.LINKS, false));
+        assertEquals("label", link.getString());
+        assertNull(styleOf(link, "label").getClickEvent());
+        assertNull(styleOf(link, "label").getHoverEvent());
+        assertFalse(styleOf(link, "label").isUnderlined());
+    }
+
+    @Test
+    void codeAndHighlightingSwitchesAreIndependent() {
+        Component source = Component.literal("```java\nreturn 42;\n```");
+        Component noHighlight = MarkdownBooks.renderPage(source,
+                RenderOptions.DEFAULT.with(Feature.SYNTAX_HIGHLIGHTING, false));
+        assertEquals("return 42;", noHighlight.getString());
+        assertEquals(0x333333, styleOf(noHighlight, "return 42;").getColor().getValue());
+        Component noCode = MarkdownBooks.renderPage(source, RenderOptions.DEFAULT.with(Feature.CODE, false));
+        assertEquals(FontDescription.DEFAULT, styleOf(noCode, "return 42;").getFont());
+        assertNull(styleOf(noCode, "return 42;").getColor());
+    }
+
+    @Test
+    void clientOptionsNeverRewriteServerFormattedComponents() {
+        Component baked = render("```java\nreturn 42;\n```");
+        assertSame(baked, MarkdownBooks.renderPage(baked, new RenderOptions(java.util.Set.of())));
+        assertSame(baked, MarkdownBooks.renderPage(baked,
+                RenderOptions.DEFAULT.with(Feature.SYNTAX_HIGHLIGHTING, false)));
+        Component raw = Component.literal("```java\nreturn 42;\n```");
+        assertEquals(baked, MarkdownBooks.formatPages(List.of(Filterable.passThrough(raw))).getFirst().raw());
+    }
+
+    @Test
+    void highlightOverflowFallsBackToCodeWithoutLosingMarkdownFormatting() {
+        String code = "int a=1;\n".repeat(200);
+        Component source = Component.literal("# Heading\n\n```java\n" + code + "```");
+        Component page = MarkdownBooks.renderPage(source);
+        assertNotSame(source, page);
+        assertEquals("Heading\n\n" + code.stripTrailing(), page.getString());
+        assertTrue(styleOf(page, "Heading").isBold());
+        assertEquals(page, MarkdownBooks.renderPage(source,
+                RenderOptions.DEFAULT.with(Feature.SYNTAX_HIGHLIGHTING, false)));
+        var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, page).getOrThrow();
+        assertEquals(page, WrittenBookContent.CONTENT_CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow());
+    }
+
+    @Test
+    void highlightedFilteredPagesRemainIndependentAndRoundTrip() {
+        List<Filterable<Component>> pages = MarkdownBooks.formatPages(List.of(new Filterable<>(
+                Component.literal("```java\nreturn 42;\n```"),
+                Optional.of(Component.literal("```python\nreturn True\n```")))));
+        assertEquals("return 42;", pages.getFirst().raw().getString());
+        assertEquals("return True", pages.getFirst().get(true).getString());
+        for (Component page : List.of(pages.getFirst().raw(), pages.getFirst().get(true))) {
+            var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, page).getOrThrow();
+            assertEquals(page, WrittenBookContent.CONTENT_CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow());
+        }
     }
 
     @Test

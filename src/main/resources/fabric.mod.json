@@ -8,6 +8,10 @@
     "JulieISBaka"
   ],
   "environment": "*",
+  "entrypoints": {
+    "client": ["org.JulieISBaka.markscription.client.ClientSettings"],
+    "modmenu": ["org.JulieISBaka.markscription.client.ModMenuIntegration"]
+  },
   "mixins": [
     "markscription.mixins.json",
     {
@@ -19,5 +23,9 @@
     "fabricloader": ">=0.19.5",
     "minecraft": "~26.3",
     "java": ">=25"
+  },
+  "suggests": {
+    "modmenu": ">=21.0.0",
+    "cloth-config": ">=26.3.159"
   }
 }

@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.component.WrittenBookContent;
+import org.JulieISBaka.markscription.RenderOptions.Feature;
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.node.*;
@@ -40,7 +41,11 @@ public final class MarkdownBooks {
     }
 
     public static Component renderPage(Component page) {
-        if (!isPlain(page)) {
+        return renderPage(page, RenderOptions.DEFAULT);
+    }
+
+    public static Component renderPage(Component page, RenderOptions options) {
+        if (!options.enabled(Feature.MARKDOWN) || !isPlain(page)) {
             return page;
         }
         String source = page.getString();
@@ -56,20 +61,38 @@ public final class MarkdownBooks {
             LOGGER.warn("Leaving a Markdown book page unchanged: nesting exceeds {}", MAX_DEPTH);
             return page;
         }
-        Renderer renderer = new Renderer();
-        renderer.render(document, Style.EMPTY);
+        Renderer renderer = render(document, options);
         Component rendered = renderer.output;
+        boolean fits = fitsBookPage(rendered);
+        if (renderer.highlighted && !fits) {
+            LOGGER.warn("Syntax highlighting exceeded the book page limit; retrying with plain code formatting");
+            rendered = render(document, options.with(Feature.SYNTAX_HIGHLIGHTING, false)).output;
+            fits = fitsBookPage(rendered);
+        }
+        if (!fits) {
+            LOGGER.warn("Leaving the Markdown book page unchanged because its formatted component cannot be stored");
+        }
+        return fits ? rendered : page;
+    }
+
+    private static Renderer render(Node document, RenderOptions options) {
+        Renderer renderer = new Renderer(options);
+        renderer.render(document, Style.EMPTY);
+        return renderer;
+    }
+
+    private static boolean fitsBookPage(Component rendered) {
         var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, rendered);
         if (encoded.isError()) {
-            LOGGER.warn("Leaving a Markdown book page unchanged: {}", encoded.error().orElseThrow().message());
-            return page;
+            LOGGER.warn("Cannot serialize formatted book component: {}", encoded.error().orElseThrow().message());
+            return false;
         }
         if (GsonHelper.encodesLongerThan(encoded.getOrThrow(), WrittenBookContent.PAGE_LENGTH)) {
-            LOGGER.warn("Leaving a Markdown book page unchanged: formatted component exceeds {} characters",
+            LOGGER.warn("Formatted book component exceeds {} characters",
                     WrittenBookContent.PAGE_LENGTH);
-            return page;
+            return false;
         }
-        return rendered;
+        return true;
     }
 
     private static boolean isPlain(Component component) {
@@ -109,25 +132,33 @@ public final class MarkdownBooks {
         // An explicit default style also prevents client-side re-parsing of baked
         // pages.
         private final MutableComponent output = Component.empty().setStyle(Style.EMPTY.withItalic(false));
+        private final RenderOptions options;
         private String prefix = "";
         private boolean lineStart = true;
+        private boolean highlighted;
+
+        private Renderer(RenderOptions options) {
+            this.options = options;
+        }
 
         private void render(Node node, Style style) {
             switch (node) {
                 case Text text -> append(text.getLiteral(), style);
                 case Code code -> append(code.getLiteral(), codeStyle(style));
-                case StrongEmphasis _ -> inline(node, style.withBold(true));
-                case Emphasis _ -> inline(node, style.withItalic(true));
-                case Strikethrough _ -> inline(node, style.withStrikethrough(true));
-                case Heading _ -> inline(node, style.withBold(true));
+                case StrongEmphasis _ -> inline(node, options.enabled(Feature.BOLD) ? style.withBold(true) : style);
+                case Emphasis _ -> inline(node, options.enabled(Feature.ITALIC) ? style.withItalic(true) : style);
+                case Strikethrough _ -> inline(node,
+                        options.enabled(Feature.STRIKETHROUGH) ? style.withStrikethrough(true) : style);
+                case Heading _ -> inline(node, options.enabled(Feature.HEADINGS) ? style.withBold(true) : style);
                 case SoftLineBreak _ -> append("\n", style);
                 case HardLineBreak _ -> append("\n", style);
-                case FencedCodeBlock code -> append(withoutFinalNewline(code.getLiteral()), codeStyle(style));
+                case FencedCodeBlock code -> fencedCode(code, style);
                 case IndentedCodeBlock code -> append(withoutFinalNewline(code.getLiteral()), codeStyle(style));
                 case HtmlInline html -> append(html.getLiteral(), style);
                 case HtmlBlock html -> append(withoutFinalNewline(html.getLiteral()), style);
                 case ThematicBreak _ -> append("---", style.withColor(0x555555));
-                case Link link -> inline(node, linkStyle(link.getDestination(), style));
+                case Link link -> inline(node,
+                        options.enabled(Feature.LINKS) ? linkStyle(link.getDestination(), style) : style);
                 case Image _ -> inline(node, style);
                 case LinkReferenceDefinition _ -> {
                 }
@@ -209,8 +240,20 @@ public final class MarkdownBooks {
             }
         }
 
-        private static Style codeStyle(Style style) {
-            return style.withFont(CODE_FONT).withColor(0x333333);
+        private void fencedCode(FencedCodeBlock code, Style style) {
+            String text = withoutFinalNewline(code.getLiteral());
+            Style base = codeStyle(style);
+            if (options.enabled(Feature.CODE) && options.enabled(Feature.SYNTAX_HIGHLIGHTING)
+                    && CodeHighlighter.highlight(text, code.getInfo(),
+                            (part, token) -> append(part, base.withColor(token.color())))) {
+                highlighted = true;
+                return;
+            }
+            append(text, base);
+        }
+
+        private Style codeStyle(Style style) {
+            return options.enabled(Feature.CODE) ? style.withFont(CODE_FONT).withColor(0x333333) : style;
         }
 
         private static Style linkStyle(String destination, Style style) {
