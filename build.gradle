@@ -63,3 +63,7 @@ java {
 test {
     useJUnitPlatform()
 }
+
+tasks.withType(Jar).configureEach {
+    from('LICENSE', 'THIRD-PARTY-NOTICES')
+}

@@ -1,0 +1,25 @@
+Markscription licensing scope
+============================
+
+The MIT license in LICENSE applies to Markscription's original code and
+documentation. It does not grant rights to third-party artwork, trademarks,
+or dependencies.
+
+Artwork
+-------
+
+The mod icon at src/main/resources/assets/markscription/icon.png incorporates
+a Minecraft book texture and a supplied Markdown logo. Those third-party
+elements, including their portions of the composite icon, are excluded from
+Markscription's MIT license and remain subject to their respective owners'
+terms.
+
+Minecraft artwork belongs to Mojang/Microsoft. Markscription is not an
+official Minecraft product and is not approved by or associated with
+Mojang or Microsoft.
+
+Dependencies
+------------
+
+Bundled libraries retain their own licenses and notices, as supplied in their
+nested JARs. Markscription's MIT license does not replace those terms.
