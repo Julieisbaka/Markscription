@@ -16,5 +16,5 @@
   "markscription.config.links": "Links Markdown clicáveis",
   "markscription.config.links.tooltip": "Colore, sublinha e ativa links HTTP/HTTPS. Quando desativado, mostra apenas seus rótulos. As ações de clique de textos já formatados não são alteradas.",
   "markscription.config.syntaxHighlighting": "Realce de sintaxe",
-  "markscription.config.syntaxHighlighting.tooltip": "Destaca palavras-chave, strings, comentários e números em blocos de código delimitados de java, javascript/js, python/py e json."
+  "markscription.config.syntaxHighlighting.tooltip": "Destaca a sintaxe compatível em blocos de código delimitados de java, javascript/js, python/py, json, mcfunction/minecraft/mccommand, snbt e toml."
 }

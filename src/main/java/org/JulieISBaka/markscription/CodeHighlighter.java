@@ -33,6 +33,9 @@ public final class CodeHighlighter {
             case "javascript", "js" -> Language.JAVASCRIPT;
             case "python", "py" -> Language.PYTHON;
             case "json" -> Language.JSON;
+            case "mcfunction", "minecraft", "mccommand" -> Language.MINECRAFT;
+            case "snbt" -> Language.SNBT;
+            case "toml" -> Language.TOML;
             default -> null;
         };
         if (language == null) {
@@ -41,11 +44,14 @@ public final class CodeHighlighter {
         int start = 0;
         int position = 0;
         Token previous = Token.PLAIN;
+        boolean lineStart = true;
+        boolean commandExpected = true;
         while (position < source.length()) {
             int end = position + 1;
             char current = source.charAt(position);
             Token token = Token.PLAIN;
-            if ((language == Language.PYTHON && current == '#')
+            if (((language == Language.PYTHON || language == Language.TOML
+                    || (language == Language.MINECRAFT && lineStart)) && current == '#')
                     || (language.slashComments && source.startsWith("//", position))) {
                 token = Token.COMMENT;
                 int newline = source.indexOf('\n', position);
@@ -59,26 +65,60 @@ public final class CodeHighlighter {
                 token = Token.STRING;
                 boolean triple = (language == Language.PYTHON || language == Language.JAVA)
                         && source.startsWith(String.valueOf(current).repeat(3), position);
-                end = stringEnd(source, position, current, triple);
+                triple |= language == Language.TOML
+                        && source.startsWith(String.valueOf(current).repeat(3), position);
+                end = stringEnd(source, position, current, triple,
+                        language != Language.TOML || current != '\'');
+            } else if (language == Language.MINECRAFT && current == '@'
+                    && position + 1 < source.length() && "paresn".indexOf(source.charAt(position + 1)) >= 0) {
+                end = position + 2;
+                if (end == source.length() || !Character.isUnicodeIdentifierPart(source.codePointAt(end))) {
+                    token = Token.KEYWORD;
+                }
             } else if (Character.isUnicodeIdentifierStart(source.codePointAt(position))
                     || current == '_' || current == '$') {
                 end = position + Character.charCount(source.codePointAt(position));
                 while (end < source.length()) {
                     int next = source.codePointAt(end);
-                    if (!Character.isUnicodeIdentifierPart(next) && next != '$') {
+                    if (!Character.isUnicodeIdentifierPart(next) && next != '$'
+                            && !((language == Language.MINECRAFT || language == Language.SNBT
+                                    || language == Language.TOML)
+                                    && (next == '/' || next == '-'
+                                            || next == '.'))
+                            && !(language == Language.MINECRAFT && next == ':')) {
                         break;
                     }
                     end += Character.charCount(next);
                 }
-                if (language.keywords.contains(source.substring(position, end))) {
+                String word = source.substring(position, end);
+                if (language.keywords.contains(word)) {
                     token = Token.KEYWORD;
+                }
+                if (language == Language.MINECRAFT) {
+                    if (commandExpected && COMMANDS.contains(word)) {
+                        token = Token.KEYWORD;
+                    }
+                    commandExpected = word.equals("run");
                 }
             } else if (current >= '0' && current <= '9') {
                 token = Token.NUMBER;
                 end = numberEnd(source, position);
+                if (language == Language.SNBT && end < source.length()
+                        && "bBsSlLfFdD".indexOf(source.charAt(end)) >= 0) {
+                    end++;
+                }
             } else if (Character.isHighSurrogate(current) && position + 1 < source.length()
                     && Character.isLowSurrogate(source.charAt(position + 1))) {
                 end++;
+            }
+            for (int index = position; index < end; index++) {
+                char consumed = source.charAt(index);
+                if (consumed == '\n') {
+                    lineStart = true;
+                    commandExpected = true;
+                } else if (!Character.isWhitespace(consumed)) {
+                    lineStart = false;
+                }
             }
             if (token != previous) {
                 if (position > start) {
@@ -95,12 +135,12 @@ public final class CodeHighlighter {
         return true;
     }
 
-    private static int stringEnd(String source, int start, char quote, boolean triple) {
+    private static int stringEnd(String source, int start, char quote, boolean triple, boolean escapes) {
         int delimiterLength = triple ? 3 : 1;
         String delimiter = String.valueOf(quote).repeat(delimiterLength);
         int position = start + delimiterLength;
         while (position < source.length()) {
-            if (source.charAt(position) == '\\') {
+            if (escapes && source.charAt(position) == '\\') {
                 position = Math.min(position + 2, source.length());
             } else if (source.startsWith(delimiter, position)) {
                 return position + delimiterLength;
@@ -110,6 +150,17 @@ public final class CodeHighlighter {
         }
         return position;
     }
+
+    private static final Set<String> COMMANDS = Set.of(
+            "advancement", "attribute", "ban", "ban-ip", "banlist", "bossbar", "clear", "clone",
+            "damage", "data", "datapack", "debug", "defaultgamemode", "deop", "difficulty", "effect",
+            "enchant", "execute", "experience", "fill", "fillbiome", "forceload", "function", "gamemode",
+            "gamerule", "give", "help", "item", "kick", "kill", "list", "locate", "loot", "me", "msg",
+            "op", "pardon", "particle", "place", "playsound", "publish", "random", "recipe", "reload",
+            "return", "ride", "say", "schedule", "scoreboard", "seed", "setblock", "setworldspawn",
+            "spawnpoint", "spectate", "spreadplayers", "stopsound", "summon", "tag", "team", "teammsg",
+            "teleport", "tell", "tellraw", "tick", "time", "title", "tp", "trigger", "w", "weather",
+            "whitelist", "worldborder", "xp");
 
     private static int numberEnd(String source, int start) {
         int position = start;
@@ -154,7 +205,10 @@ public final class CodeHighlighter {
                 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from",
                 "global", "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass",
                 "raise", "return", "try", "while", "with", "yield", "match", "case")),
-        JSON(false, Set.of("true", "false", "null"));
+        JSON(false, Set.of("true", "false", "null")),
+        MINECRAFT(false, Set.of()),
+        SNBT(false, Set.of("true", "false")),
+        TOML(false, Set.of("true", "false", "inf", "nan"));
 
         private final boolean slashComments;
         private final Set<String> keywords;

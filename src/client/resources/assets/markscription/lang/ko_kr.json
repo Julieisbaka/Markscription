@@ -16,5 +16,5 @@
   "markscription.config.links": "클릭 가능한 Markdown 링크",
   "markscription.config.links.tooltip": "HTTP/HTTPS 링크에 색상과 밑줄을 적용하고 클릭을 활성화합니다. 끄면 링크 텍스트만 표시합니다. 기존 서식 있는 텍스트의 클릭 동작은 변경하지 않습니다.",
   "markscription.config.syntaxHighlighting": "구문 강조",
-  "markscription.config.syntaxHighlighting.tooltip": "java, javascript/js, python/py, json으로 지정된 울타리 코드 블록의 키워드, 문자열, 주석, 숫자를 강조합니다."
+  "markscription.config.syntaxHighlighting.tooltip": "java, javascript/js, python/py, json, mcfunction/minecraft/mccommand, snbt, toml로 지정된 울타리 코드 블록에서 지원되는 구문을 강조합니다."
 }

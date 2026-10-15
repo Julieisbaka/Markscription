@@ -16,5 +16,5 @@
   "markscription.config.links": "可点击的 Markdown 链接",
   "markscription.config.links.tooltip": "为 HTTP/HTTPS 链接着色、添加下划线并启用点击。关闭后仅显示链接文本。不改变现有富文本的点击操作。",
   "markscription.config.syntaxHighlighting": "语法高亮",
-  "markscription.config.syntaxHighlighting.tooltip": "高亮标记为 java、javascript/js、python/py 和 json 的围栏代码块中的关键字、字符串、注释和数字。"
+  "markscription.config.syntaxHighlighting.tooltip": "高亮标记为 java、javascript/js、python/py、json、mcfunction/minecraft/mccommand、snbt 和 toml 的围栏代码块中受支持的语法。"
 }

@@ -83,6 +83,58 @@ class CodeHighlighterTest {
     }
 
     @Test
+    void minecraftHighlightsCommandsSelectorsAndFullLineComments() {
+        List<Run> runs = highlight("# give @p 42\n/give @p minecraft:stone 2\nexecute as @e run say hi", "mcfunction");
+        assertContains(runs, "# give @p 42", Token.COMMENT);
+        assertContains(runs, "give", Token.KEYWORD);
+        assertContains(runs, "@p", Token.KEYWORD);
+        assertContains(runs, "2", Token.NUMBER);
+        assertContains(runs, "execute", Token.KEYWORD);
+        assertContains(runs, "@e", Token.KEYWORD);
+        assertContains(runs, "say", Token.KEYWORD);
+        assertContains(highlight("say give", "minecraft"), " give", Token.PLAIN);
+        assertContains(highlight("give @person minecraft:stone", "mccommand"), " @person minecraft:stone", Token.PLAIN);
+        assertContains(highlight("say # not a comment", "mcfunction"), " # not a comment", Token.PLAIN);
+    }
+
+    @Test
+    void snbtHighlightsTypesWithoutInterpretingBareStringsAsCode() {
+        List<Run> runs = highlight("{Health:20f,Flag:true,Name:'give 42',Bytes:[B;1b,-2B],id:minecraft:stone}", "snbt");
+        assertContains(runs, "20f", Token.NUMBER);
+        assertContains(runs, "true", Token.KEYWORD);
+        assertContains(runs, "'give 42'", Token.STRING);
+        assertContains(runs, "1b", Token.NUMBER);
+        assertContains(runs, "2B", Token.NUMBER);
+        assertContains(highlight("123s 123L 1.5d 2F", "snbt"), "123s", Token.NUMBER);
+        assertTrue(highlight("give minecraft:stone", "snbt").stream().allMatch(run -> run.token() == Token.PLAIN));
+    }
+
+    @Test
+    void tomlDistinguishesLiteralStringsCommentsAndMultilineStrings() {
+        List<Run> runs = highlight("[book]\nenabled = true # comment\ncount = 42\nname = 'C:\\'\nother = false",
+                "toml");
+        assertContains(runs, "true", Token.KEYWORD);
+        assertContains(runs, "# comment", Token.COMMENT);
+        assertContains(runs, "42", Token.NUMBER);
+        assertContains(runs, "'C:\\'", Token.STRING);
+        assertContains(runs, "false", Token.KEYWORD);
+        assertContains(highlight("text = \"\"\"line\n# not comment\"\"\"", "toml"),
+                "\"\"\"line\n# not comment\"\"\"", Token.STRING);
+        assertContains(highlight("text = '''C:\\\ntrue'''", "toml"), "'''C:\\\ntrue'''", Token.STRING);
+    }
+
+    @Test
+    void newLanguagesPreserveUnicodeAndUnfinishedInput() {
+        for (String language : List.of("mcfunction", "minecraft", "mccommand", "snbt", "toml")) {
+            for (String source : List.of("", "\n \t", "\u65e5\u672c\u8a9e \ud83d\ude00",
+                    "unknown 42 \"unfinished", "'C:\\'", "# comment\n")) {
+                highlight(source, language);
+            }
+        }
+        assertContains(highlight("give @p stone", "MCFUNCTION title=test"), "give", Token.KEYWORD);
+    }
+
+    @Test
     void scansBookSizedInputsQuicklyAndCoalescesPlainText() {
         String source = "int value = 42; // comment\n".repeat(1000);
         assertTimeout(Duration.ofSeconds(10), () -> {

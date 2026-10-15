@@ -16,5 +16,5 @@
   "markscription.config.links": "Enlaces Markdown interactivos",
   "markscription.config.links.tooltip": "Colorea, subraya y activa los enlaces HTTP/HTTPS. Si se desactiva, muestra solo sus etiquetas. No cambia las acciones de clic del texto enriquecido existente.",
   "markscription.config.syntaxHighlighting": "Resaltado de sintaxis",
-  "markscription.config.syntaxHighlighting.tooltip": "Resalta palabras clave, cadenas, comentarios y números en bloques delimitados de java, javascript/js, python/py y json."
+  "markscription.config.syntaxHighlighting.tooltip": "Resalta la sintaxis compatible en bloques delimitados de java, javascript/js, python/py, json, mcfunction/minecraft/mccommand, snbt y toml."
 }

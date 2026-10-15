@@ -301,6 +301,33 @@ class MarkdownBooksTest {
     }
 
     @Test
+    void minecraftSnbtAndTomlFencesRespectSettingsAndBookSerialization() {
+        for (String[] example : List.of(
+                new String[] { "mcfunction", "give @p minecraft:stone 2", "give", "2" },
+                new String[] { "snbt", "{Flag:true,Count:2b}", "true", "2b" },
+                new String[] { "toml", "enabled = true\ncount = 2", "true", "2" })) {
+            Component source = Component.literal("```" + example[0] + "\n" + example[1] + "\n```");
+            Component page = MarkdownBooks.renderPage(source);
+            assertEquals(example[1], page.getString());
+            assertEquals(CodeHighlighter.Token.KEYWORD.color(), styleOf(page, example[2]).getColor().getValue());
+            assertEquals(CodeHighlighter.Token.NUMBER.color(), styleOf(page, example[3]).getColor().getValue());
+            var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, page).getOrThrow();
+            Component decoded = WrittenBookContent.CONTENT_CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
+            assertEquals(page, decoded);
+            assertSame(decoded, MarkdownBooks.renderPage(decoded));
+            Component plain = MarkdownBooks.renderPage(source,
+                    RenderOptions.DEFAULT.with(Feature.SYNTAX_HIGHLIGHTING, false));
+            assertEquals(example[1], plain.getString());
+            plain.visit((style, text) -> {
+                if (!text.isEmpty() && !text.equals("\n")) {
+                    assertEquals(0x333333, style.getColor().getValue());
+                }
+                return Optional.empty();
+            }, Style.EMPTY);
+        }
+    }
+
+    @Test
     void serializationOverflowKeepsOriginalRatherThanLosingThePage() {
         Component source = Component.literal("**x** ".repeat(5000));
         assertSame(source, MarkdownBooks.renderPage(source));

@@ -16,5 +16,5 @@
   "markscription.config.links": "クリック可能なMarkdownリンク",
   "markscription.config.links.tooltip": "HTTP/HTTPSリンクに色と下線を付け、クリック可能にします。オフの場合はラベルのみ表示します。既存の装飾付きテキストのクリック動作は変更しません。",
   "markscription.config.syntaxHighlighting": "構文の強調表示",
-  "markscription.config.syntaxHighlighting.tooltip": "java、javascript/js、python/py、jsonと指定されたフェンス付きコードブロック内のキーワード、文字列、コメント、数値を強調表示します。"
+  "markscription.config.syntaxHighlighting.tooltip": "java、javascript/js、python/py、json、mcfunction/minecraft/mccommand、snbt、tomlと指定されたフェンス付きコードブロック内の対応する構文を強調表示します。"
 }

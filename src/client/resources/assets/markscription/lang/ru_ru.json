@@ -16,5 +16,5 @@
   "markscription.config.links": "Кликабельные ссылки Markdown",
   "markscription.config.links.tooltip": "Окрашивает, подчёркивает и активирует ссылки HTTP/HTTPS. Если отключено, показывает только текст ссылок. Существующие действия по нажатию в форматированном тексте не изменяются.",
   "markscription.config.syntaxHighlighting": "Подсветка синтаксиса",
-  "markscription.config.syntaxHighlighting.tooltip": "Подсвечивает ключевые слова, строки, комментарии и числа в ограждённых блоках кода java, javascript/js, python/py и json."
+  "markscription.config.syntaxHighlighting.tooltip": "Подсвечивает поддерживаемый синтаксис в ограждённых блоках кода java, javascript/js, python/py, json, mcfunction/minecraft/mccommand, snbt и toml."
 }

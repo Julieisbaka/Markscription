@@ -15,7 +15,7 @@ Write in a book and quill as usual, then sign it to see your formatting.
 - **Expressive text:** bold, italic, and strikethrough.
 - **Organized pages:** headings, numbered lists, bullet lists, and quotations.
 - **Code-friendly books:** inline code and code blocks, with syntax highlighting for
-  Java, JavaScript, Python, and JSON.
+  Java, JavaScript, Python, JSON, Minecraft commands, SNBT, and TOML.
 - **Clickable web links:** link readers to websites using HTTP or HTTPS.
 - **Read wherever you like:** works with books in your hand and on lecterns.
 - **Your preferred style:** turn individual formatting features on or off for local reading.
@@ -67,8 +67,13 @@ int count = 42; // A comment
 ```
 ````
 
-Supported labels: `java`, `javascript` or `js`, `python` or `py`, and `json`.
+Supported labels: `java`, `javascript` or `js`, `python` or `py`, `json`,
+`mcfunction` (also `minecraft` or `mccommand`), `snbt`, and `toml`.
 Other languages still appear as plain code blocks.
+
+Use `mcfunction` for command examples, `snbt` for Minecraft data, and `toml` for
+configuration snippets. Highlighting is intentionally simple, not a syntax validator;
+unrecognized syntax remains readable and is never executed.
 
 ## Single player and multiplayer
 
