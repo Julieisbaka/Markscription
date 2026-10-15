@@ -79,15 +79,17 @@ unrecognized syntax remains readable and is never executed.
 
 ## Single player and multiplayer
 
-| Where you install it | What you get |
-| --- | --- |
-| **Single player** | Formatting when you sign books, plus local formatting for older plain-text Markdown books. |
-| **Client only** | Read plain-text Markdown books with formatting, even on vanilla servers. Other players need the mod to see that formatting too. |
-| **Server only** | Newly signed books keep their formatting for everyone, including vanilla players. Existing books aren't changed. |
-| **Both** | The best coverage: locally formatted older books and newly signed books that everyone can read with formatting. |
+| Where you install it | Book formatting | Settings and code themes |
+| --- | --- | --- |
+| **Single player** | Newly signed books keep their formatting. Older plain-text Markdown books are formatted locally when you read them. | Choose local formatting features and colors, and import or export themes. A separate server theme controls colors saved when signing. |
+| **Client only** | Read plain-text Markdown books with formatting, even on vanilla servers. Other players need the mod to see that formatting too. | Choose local formatting features and colors, and import or export themes. Your preferences only affect your own view. |
+| **Server only** | Newly signed books keep their formatting for everyone, including vanilla players. Existing books aren't changed. | Server owners choose the colors saved in newly signed books. Vanilla readers have no local formatting controls or theme import/export screen. |
+| **Both** | Newly signed books keep their formatting for everyone. The client also formats older plain-text Markdown books locally. | Server colors apply to newly signed books; client feature switches, colors, and theme import/export apply only to local formatting of plain-text books. |
 
 On a modded server, formatting in newly signed books stays with the book, even if
-the mod is removed later.
+the mod is removed later. Installing the client mod doesn't let you disable or
+recolor formatting already saved by the server. The in-game client settings and
+theme import/export screen require Mod Menu and Cloth Config.
 
 ## Make it yours
 
