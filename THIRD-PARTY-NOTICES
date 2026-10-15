@@ -8,7 +8,7 @@ or dependencies.
 Artwork
 -------
 
-The mod icon at src/main/resources/assets/markscription/icon.png incorporates
+The mod icon at `src/main/resources/assets/markscription/icon.png` incorporates
 a Minecraft book texture and a public-domain Markdown logo.
 
 The Markdown logo is in the public domain and is not subject to
