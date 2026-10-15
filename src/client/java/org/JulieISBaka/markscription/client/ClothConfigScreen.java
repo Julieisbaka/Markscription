@@ -46,7 +46,7 @@ final class ClothConfigScreen {
                 for (Token token : Token.values()) {
                         colors.put(token, current.theme().color(token));
                         themeCategory.addEntry(builder.entryBuilder()
-                                        .startColorField(
+                                        .startIntField(
                                                         Component.translatable("markscription.theme."
                                                                         + SyntaxTheme.key(token)),
                                                         current.theme().color(token))
