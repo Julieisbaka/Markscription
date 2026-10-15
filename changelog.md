@@ -11,6 +11,7 @@
 - Existing client configs keep their settings and default palette; previously formatted
   books retain their saved colors.
 - Theme preferences respect disabled highlighting and the existing book-size fallback.
+- The default palette is bundled as a JSON theme using the same format as shared themes.
 - Added translated theme controls and feedback in all nine supported languages.
 
 ## 0.2.1 - 10/14/26

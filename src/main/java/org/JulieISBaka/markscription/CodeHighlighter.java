@@ -9,21 +9,7 @@ public final class CodeHighlighter {
     }
 
     public enum Token {
-        PLAIN(0x333333),
-        KEYWORD(0x6F238A),
-        STRING(0x24662D),
-        COMMENT(0x616158),
-        NUMBER(0x244F9E);
-
-        private final int color;
-
-        Token(int color) {
-            this.color = color;
-        }
-
-        public int color() {
-            return color;
-        }
+        PLAIN, KEYWORD, STRING, COMMENT, NUMBER
     }
 
     public static boolean highlight(String source, String info, BiConsumer<String, Token> output) {

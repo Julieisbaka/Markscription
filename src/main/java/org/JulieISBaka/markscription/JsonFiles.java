@@ -10,6 +10,7 @@ import com.google.gson.Strictness;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -28,15 +29,19 @@ final class JsonFiles {
         if (Files.size(path) > MAX_BYTES) {
             throw new IOException("Configuration file exceeds 64 KiB: " + path);
         }
-        try (JsonReader reader = new JsonReader(new StringReader(Files.readString(path, StandardCharsets.UTF_8)))) {
+        return read(new StringReader(Files.readString(path, StandardCharsets.UTF_8)), path.toString());
+    }
+
+    static JsonObject read(Reader input, String source) throws IOException {
+        try (JsonReader reader = new JsonReader(input)) {
             reader.setStrictness(Strictness.STRICT);
             JsonElement root = JsonParser.parseReader(reader);
             if (reader.peek() != JsonToken.END_DOCUMENT || !root.isJsonObject()) {
-                throw new IOException("Expected one JSON object in " + path);
+                throw new IOException("Expected one JSON object in " + source);
             }
             return root.getAsJsonObject();
         } catch (JsonParseException exception) {
-            throw new IOException("Invalid JSON in " + path, exception);
+            throw new IOException("Invalid JSON in " + source, exception);
         }
     }
 

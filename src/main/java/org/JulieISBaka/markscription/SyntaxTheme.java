@@ -3,6 +3,8 @@ package org.JulieISBaka.markscription;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
@@ -66,10 +68,14 @@ public record SyntaxTheme(Map<Token, Integer> colors) {
     }
 
     private static SyntaxTheme defaults() {
-        EnumMap<Token, Integer> colors = new EnumMap<>(Token.class);
-        for (Token token : Token.values()) {
-            colors.put(token, token.color());
+        String resource = "/assets/markscription/themes/default.json";
+        try (var input = SyntaxTheme.class.getResourceAsStream(resource)) {
+            if (input == null) {
+                throw new IllegalStateException("Missing bundled default syntax theme: " + resource);
+            }
+            return fromJson(JsonFiles.read(new InputStreamReader(input, StandardCharsets.UTF_8), resource));
+        } catch (IOException exception) {
+            throw new IllegalStateException("Cannot load bundled default syntax theme: " + resource, exception);
         }
-        return new SyntaxTheme(colors);
     }
 }

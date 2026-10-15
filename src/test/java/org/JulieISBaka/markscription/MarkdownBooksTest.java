@@ -216,9 +216,12 @@ class MarkdownBooksTest {
     void labeledFencesHighlightButInlineAndUnknownCodeStayPlain() {
         Component page = render("```java\nreturn 42; // comment\n```");
         assertEquals("return 42; // comment", page.getString());
-        assertEquals(CodeHighlighter.Token.KEYWORD.color(), styleOf(page, "return").getColor().getValue());
-        assertEquals(CodeHighlighter.Token.NUMBER.color(), styleOf(page, "42").getColor().getValue());
-        assertEquals(CodeHighlighter.Token.COMMENT.color(), styleOf(page, "// comment").getColor().getValue());
+        assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.KEYWORD),
+                styleOf(page, "return").getColor().getValue());
+        assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.NUMBER),
+                styleOf(page, "42").getColor().getValue());
+        assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.COMMENT),
+                styleOf(page, "// comment").getColor().getValue());
         assertEquals(0x333333, styleOf(render("`return`"), "return").getColor().getValue());
         for (String label : List.of("", "unknown")) {
             Component plain = render("```" + label + "\nreturn 42;\n```");
@@ -309,8 +312,10 @@ class MarkdownBooksTest {
             Component source = Component.literal("```" + example[0] + "\n" + example[1] + "\n```");
             Component page = MarkdownBooks.renderPage(source);
             assertEquals(example[1], page.getString());
-            assertEquals(CodeHighlighter.Token.KEYWORD.color(), styleOf(page, example[2]).getColor().getValue());
-            assertEquals(CodeHighlighter.Token.NUMBER.color(), styleOf(page, example[3]).getColor().getValue());
+            assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.KEYWORD),
+                    styleOf(page, example[2]).getColor().getValue());
+            assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.NUMBER),
+                    styleOf(page, example[3]).getColor().getValue());
             var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, page).getOrThrow();
             Component decoded = WrittenBookContent.CONTENT_CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
             assertEquals(page, decoded);
@@ -370,7 +375,7 @@ class MarkdownBooksTest {
         assertEquals(0x123456, styleOf(baked.get(true), "true").getColor().getValue());
         assertEquals(0x654321, styleOf(MarkdownBooks.renderPage(source,
                 RenderOptions.DEFAULT.withTheme(client)), "return").getColor().getValue());
-        assertEquals(CodeHighlighter.Token.KEYWORD.color(),
+        assertEquals(SyntaxTheme.DEFAULT.color(CodeHighlighter.Token.KEYWORD),
                 styleOf(MarkdownBooks.renderPage(source), "return").getColor().getValue());
     }
 

@@ -4,16 +4,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
 import org.JulieISBaka.markscription.CodeHighlighter.Token;
 import org.junit.jupiter.api.Test;
 
 class SyntaxThemeTest {
     @Test
-    void defaultPalettePreservesExistingColors() throws IOException {
-        for (Token token : Token.values()) {
-            assertEquals(token.color(), SyntaxTheme.DEFAULT.color(token));
+    void bundledDefaultUsesTheSharedThemeFormat() throws IOException {
+        try (var input = SyntaxTheme.class.getResourceAsStream("/assets/markscription/themes/default.json")) {
+            assertNotNull(input);
+            JsonObject json = JsonFiles.read(new InputStreamReader(input, StandardCharsets.UTF_8), "bundled theme");
+            assertEquals(SyntaxTheme.DEFAULT, SyntaxTheme.fromJson(json));
+            assertEquals(json, SyntaxTheme.DEFAULT.toJson());
         }
+    }
+
+    @Test
+    void resourceParserRejectsMalformedOrTrailingJson() {
+        for (String source : new String[] {"{", "null", "[]", "{} true", "{/* comment */}"}) {
+            assertThrows(IOException.class, () -> JsonFiles.read(new StringReader(source), "test resource"));
+        }
+    }
+
+    @Test
+    void defaultPalettePreservesExistingColors() throws IOException {
+        assertEquals(0x333333, SyntaxTheme.DEFAULT.color(Token.PLAIN));
+        assertEquals(0x6F238A, SyntaxTheme.DEFAULT.color(Token.KEYWORD));
+        assertEquals(0x24662D, SyntaxTheme.DEFAULT.color(Token.STRING));
+        assertEquals(0x616158, SyntaxTheme.DEFAULT.color(Token.COMMENT));
+        assertEquals(0x244F9E, SyntaxTheme.DEFAULT.color(Token.NUMBER));
         assertEquals(SyntaxTheme.DEFAULT, SyntaxTheme.fromJson(SyntaxTheme.DEFAULT.toJson()));
     }
 
@@ -23,7 +45,7 @@ class SyntaxThemeTest {
         mutable.putAll(SyntaxTheme.DEFAULT.colors());
         SyntaxTheme theme = new SyntaxTheme(mutable);
         mutable.put(Token.KEYWORD, 0);
-        assertEquals(Token.KEYWORD.color(), theme.color(Token.KEYWORD));
+        assertEquals(SyntaxTheme.DEFAULT.color(Token.KEYWORD), theme.color(Token.KEYWORD));
         assertThrows(UnsupportedOperationException.class, () -> theme.colors().clear());
         assertThrows(IllegalArgumentException.class, () -> theme.with(Token.PLAIN, -1));
         assertThrows(IllegalArgumentException.class, () -> theme.with(Token.PLAIN, 0x1000000));
