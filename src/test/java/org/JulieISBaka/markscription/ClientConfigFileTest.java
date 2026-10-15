@@ -71,6 +71,31 @@ class ClientConfigFileTest {
     }
 
     @Test
+    void themedSettingsRoundTripAndOldSettingsKeepDefaultPalette() throws IOException {
+        Path path = directory.resolve("client.json");
+        Files.writeString(path, "{\"bold\":false,\"syntaxHighlighting\":true}");
+        ClientConfigFile file = new ClientConfigFile(path);
+        RenderOptions old = file.load();
+        assertEquals(SyntaxTheme.DEFAULT, old.theme());
+        assertFalse(old.enabled(Feature.BOLD));
+        SyntaxTheme theme = SyntaxTheme.DEFAULT.with(CodeHighlighter.Token.KEYWORD, 0x123456);
+        RenderOptions updated = old.withTheme(theme);
+        file.save(updated);
+        assertEquals(updated, file.load());
+        assertFalse(file.load().enabled(Feature.BOLD));
+    }
+
+    @Test
+    void invalidThemeNeverChangesExistingConfig() throws IOException {
+        Path path = directory.resolve("client.json");
+        for (String input : new String[] { "{\"theme\":null}", "{\"theme\":{}}", "{\"theme\":true}" }) {
+            Files.writeString(path, input);
+            assertThrows(IOException.class, () -> new ClientConfigFile(path).load());
+            assertEquals(input, Files.readString(path));
+        }
+    }
+
+    @Test
     void renderingOptionsAreImmutableAndDoNotChangeGlobalDefaults() {
         EnumSet<Feature> original = EnumSet.allOf(Feature.class);
         RenderOptions options = new RenderOptions(original);

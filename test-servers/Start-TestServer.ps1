@@ -4,7 +4,7 @@ param(
     [string]$Server
 )
 
-Set-Variable -Name ModVersion -Value '0.2.1' -Option Constant
+Set-Variable -Name ModVersion -Value '0.3.0' -Option Constant
 
 $ErrorActionPreference = 'Stop'
 $serverDirectory = Join-Path $PSScriptRoot $Server

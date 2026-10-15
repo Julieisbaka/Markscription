@@ -19,6 +19,8 @@ Write in a book and quill as usual, then sign it to see your formatting.
 - **Clickable web links:** link readers to websites using HTTP or HTTPS.
 - **Read wherever you like:** works with books in your hand and on lecterns.
 - **Your preferred style:** turn individual formatting features on or off for local reading.
+- **Shareable code themes:** choose your own syntax colors, import a friend's palette,
+  or export yours. Servers can choose colors for newly signed books too.
 - **Flexible multiplayer support:** use it on your client, your server, or both.
 
 ## Installation
@@ -103,6 +105,50 @@ change formatting when signing or remove formatting already saved by a server.
 
 The settings screen supports English, Spanish, French, German, Brazilian Portuguese,
 Japanese, Simplified Chinese, Korean, and Russian, following your Minecraft language.
+
+### Code themes
+
+In **Configure > Syntax theme**, choose colors for plain code, keywords, strings,
+comments, and numbers. Pick colors that are easy to read against book pages.
+The plain-code color also applies to inline code and blocks without highlighting.
+
+To share a theme:
+
+1. Choose a filename such as `my-theme.json`.
+2. Set **Theme file action on Save** to **Export theme**, then **Save & Done**.
+3. Share the file from `config/markscription/themes` in your Minecraft instance.
+
+To use someone else's theme, put their JSON file in that folder, enter its filename,
+select **Import theme**, then **Save & Done**. Import replaces the color choices, not
+your other settings. Reopen settings to view the imported colors and reopen your book
+to see them. Export requires a new filename so it won't overwrite an existing theme.
+File actions reset to **None** each time you open the screen.
+
+Without the settings-screen mods, edit the `theme` object in
+`config/markscription-client.json`. Its five colors use the same format as theme files:
+
+```json
+{
+  "plain": "#333333",
+  "keyword": "#6F238A",
+  "string": "#24662D",
+  "comment": "#616158",
+  "number": "#244F9E"
+}
+```
+
+All five colors are required, written as `#RRGGBB`. Theme files contain just this object,
+not the rest of your client settings. Invalid files are reported rather than imported;
+check the game log for details. Existing client configs keep the original colors.
+
+**For server owners:** after starting the mod once, edit
+`config/markscription-server-theme.json` and restart. It uses exactly the theme format
+above, so you can copy an exported client theme into it. The server's colors are saved
+into newly signed books for everyone, including vanilla readers. The same setting is
+used when signing in single player.
+
+Client and server themes are independent: client preferences never recolor books
+already formatted by a server, and changing a server theme doesn't rewrite older books.
 
 ## Good to know
 

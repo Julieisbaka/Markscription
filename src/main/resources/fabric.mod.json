@@ -11,6 +11,9 @@
   ],
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "org.JulieISBaka.markscription.ServerSettings"
+    ],
     "client": [
       "org.JulieISBaka.markscription.client.ClientSettings"
     ],

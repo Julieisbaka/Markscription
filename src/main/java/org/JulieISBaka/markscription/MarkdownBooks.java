@@ -37,7 +37,11 @@ public final class MarkdownBooks {
     }
 
     public static List<Filterable<Component>> formatPages(List<Filterable<Component>> pages) {
-        return pages.stream().map(page -> page.map(MarkdownBooks::renderPage)).toList();
+        return formatPages(pages, RenderOptions.DEFAULT);
+    }
+
+    public static List<Filterable<Component>> formatPages(List<Filterable<Component>> pages, RenderOptions options) {
+        return pages.stream().map(page -> page.map(component -> renderPage(component, options))).toList();
     }
 
     public static Component renderPage(Component page) {
@@ -245,7 +249,7 @@ public final class MarkdownBooks {
             Style base = codeStyle(style);
             if (options.enabled(Feature.CODE) && options.enabled(Feature.SYNTAX_HIGHLIGHTING)
                     && CodeHighlighter.highlight(text, code.getInfo(),
-                            (part, token) -> append(part, base.withColor(token.color())))) {
+                            (part, token) -> append(part, base.withColor(options.theme().color(token))))) {
                 highlighted = true;
                 return;
             }
@@ -253,7 +257,9 @@ public final class MarkdownBooks {
         }
 
         private Style codeStyle(Style style) {
-            return options.enabled(Feature.CODE) ? style.withFont(CODE_FONT).withColor(0x333333) : style;
+            return options.enabled(Feature.CODE)
+                    ? style.withFont(CODE_FONT).withColor(options.theme().color(CodeHighlighter.Token.PLAIN))
+                    : style;
         }
 
         private static Style linkStyle(String destination, Style style) {

@@ -328,6 +328,68 @@ class MarkdownBooksTest {
     }
 
     @Test
+    void customThemeColorsEveryTokenAndPlainCodeWithoutChangingText() {
+        SyntaxTheme theme = new SyntaxTheme(java.util.Map.of(
+                CodeHighlighter.Token.PLAIN, 0x010203,
+                CodeHighlighter.Token.KEYWORD, 0x111213,
+                CodeHighlighter.Token.STRING, 0x212223,
+                CodeHighlighter.Token.COMMENT, 0x313233,
+                CodeHighlighter.Token.NUMBER, 0x414243));
+        RenderOptions options = RenderOptions.DEFAULT.withTheme(theme);
+        Component page = MarkdownBooks.renderPage(
+                Component.literal("```java\nint x=42; \"hi\" // comment\n```"), options);
+        assertEquals("int x=42; \"hi\" // comment", page.getString());
+        assertEquals(0x111213, styleOf(page, "int").getColor().getValue());
+        assertEquals(0x010203, styleOf(page, " x=").getColor().getValue());
+        assertEquals(0x414243, styleOf(page, "42").getColor().getValue());
+        assertEquals(0x212223, styleOf(page, "\"hi\"").getColor().getValue());
+        assertEquals(0x313233, styleOf(page, "// comment").getColor().getValue());
+        for (String source : List.of("`code`", "```\ncode\n```", "    code")) {
+            Component code = MarkdownBooks.renderPage(Component.literal(source), options);
+            assertEquals(0x010203, styleOf(code, "code").getColor().getValue());
+        }
+        Component plain = MarkdownBooks.renderPage(Component.literal("**normal**"), options);
+        assertNull(styleOf(plain, "normal").getColor());
+    }
+
+    @Test
+    void independentlyThemedServerPagesRetainTheirColorsOnClients() {
+        SyntaxTheme server = SyntaxTheme.DEFAULT.with(CodeHighlighter.Token.KEYWORD, 0x123456);
+        SyntaxTheme client = SyntaxTheme.DEFAULT.with(CodeHighlighter.Token.KEYWORD, 0x654321);
+        Component source = Component.literal("```java\nreturn 42;\n```");
+        Filterable<Component> input = new Filterable<>(source,
+                Optional.of(Component.literal("```json\ntrue\n```")));
+        Filterable<Component> baked = MarkdownBooks.formatPages(List.of(input),
+                RenderOptions.DEFAULT.withTheme(server)).getFirst();
+        for (Component page : List.of(baked.raw(), baked.get(true))) {
+            var encoded = WrittenBookContent.CONTENT_CODEC.encodeStart(JsonOps.INSTANCE, page).getOrThrow();
+            Component decoded = WrittenBookContent.CONTENT_CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
+            assertSame(decoded, MarkdownBooks.renderPage(decoded, RenderOptions.DEFAULT.withTheme(client)));
+        }
+        assertEquals(0x123456, styleOf(baked.raw(), "return").getColor().getValue());
+        assertEquals(0x123456, styleOf(baked.get(true), "true").getColor().getValue());
+        assertEquals(0x654321, styleOf(MarkdownBooks.renderPage(source,
+                RenderOptions.DEFAULT.withTheme(client)), "return").getColor().getValue());
+        assertEquals(CodeHighlighter.Token.KEYWORD.color(),
+                styleOf(MarkdownBooks.renderPage(source), "return").getColor().getValue());
+    }
+
+    @Test
+    void customPlainColorSurvivesDisabledHighlightingAndSizeFallback() {
+        RenderOptions options = RenderOptions.DEFAULT.withTheme(
+                SyntaxTheme.DEFAULT.with(CodeHighlighter.Token.PLAIN, 0x123456));
+        Component source = Component.literal("```java\nint a=1;\n```");
+        Component disabled = MarkdownBooks.renderPage(source,
+                options.with(Feature.SYNTAX_HIGHLIGHTING, false));
+        assertEquals(0x123456, styleOf(disabled, "int a=1;").getColor().getValue());
+        Component large = Component.literal("```java\n" + "int a=1;\n".repeat(200) + "```");
+        assertEquals(MarkdownBooks.renderPage(large, options.with(Feature.SYNTAX_HIGHLIGHTING, false)),
+                MarkdownBooks.renderPage(large, options));
+        Component unstyled = MarkdownBooks.renderPage(source, options.with(Feature.CODE, false));
+        assertNull(styleOf(unstyled, "int a=1;").getColor());
+    }
+
+    @Test
     void serializationOverflowKeepsOriginalRatherThanLosingThePage() {
         Component source = Component.literal("**x** ".repeat(5000));
         assertSame(source, MarkdownBooks.renderPage(source));

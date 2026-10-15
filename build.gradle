@@ -32,6 +32,7 @@ dependencies {
     implementation include('org.commonmark:commonmark-ext-gfm-strikethrough:0.24.0')
     clientCompileOnly('com.terraformersmc:modmenu:21.0.0') { transitive = false }
     clientCompileOnly('me.shedaniel.cloth:cloth-config-fabric:26.3.159') { transitive = false }
+    clientCompileOnly 'me.shedaniel.cloth:basic-math:0.6.1'
     clientRuntimeOnly('com.terraformersmc:modmenu:21.0.0') { transitive = false }
     clientRuntimeOnly('me.shedaniel.cloth:cloth-config-fabric:26.3.159') { transitive = false }
     clientRuntimeOnly('net.fabricmc.fabric-api:fabric-api:0.162.0+26.3') { transitive = false }
