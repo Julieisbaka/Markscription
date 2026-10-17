@@ -25,7 +25,7 @@ Write in a book and quill as usual, then sign it to see your formatting.
 
 ## Installation
 
-For **Minecraft Java Edition 26.3** with **Fabric Loader 0.19.5 or newer** and **Java 25**.
+For **Minecraft Java Edition 26.3** with **Fabric Loader 0.19.5 or newer** and **Java 21**.
 
 1. Install Fabric for Minecraft 26.3.
 2. Put the Markscription mod JAR in your Minecraft instance's `mods` folder.
