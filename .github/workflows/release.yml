@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: Mark the release as a pre-release
+        type: boolean
+        default: false
+      run-tests:
+        description: Run tests before publishing
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: |
+          version=$(sed -n 's/^mod_version=//p' gradle.properties | tr -d '[:space:]')
+          if [ -z "$version" ]; then
+            echo "::error::mod_version not found in gradle.properties"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure release does not already exist
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "::error::Release ${{ steps.version.outputs.tag }} already exists"
+            exit 1
+          fi
+
+      - name: Extract changelog notes
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v v="$VERSION" '
+            /^## / {
+              if (found) exit
+              split(substr($0, 4), parts, " ")
+              if (parts[1] == v) { found = 1; next }
+            }
+            found { print }
+          ' changelog.md | sed -e '/./,$!d' > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::No changelog entry found for version $VERSION in changelog.md"
+            exit 1
+          fi
+          cat release-notes.md
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      # Caches Gradle dependencies, wrapper, and Loom's global Minecraft cache.
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Cache Loom project cache
+        uses: actions/cache@v4
+        with:
+          path: .gradle/loom-cache
+          key: loom-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: loom-${{ runner.os }}-
+
+      - name: Build
+        run: ./gradlew ${{ inputs.run-tests && 'build' || 'assemble' }} --build-cache --stacktrace
+
+      - name: Create GitHub release
+        run: |
+          flags=()
+          if [ "${{ inputs.prerelease }}" = "true" ]; then flags+=(--prerelease); fi
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --target "$GITHUB_SHA" \
+            --title "Markscription ${{ steps.version.outputs.version }}" \
+            --notes-file release-notes.md \
+            "${flags[@]}" \
+            build/libs/*.jar
